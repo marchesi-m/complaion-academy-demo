@@ -20,6 +20,13 @@ services:
       FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-http://localhost:3000,http://localhost:5173}
     expose:
       - "80"
+    networks:
+      - default
+      - coolify
+    labels:
+      caddy_ingress_network: "coolify"
+      caddy_0: "${SERVICE_FQDN_BACKEND}"
+      caddy_0.reverse_proxy: "{{upstreams 80}}"
     depends_on:
       mongo:
         condition: service_healthy
@@ -31,8 +38,19 @@ services:
         VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
     expose:
       - "80"
+    networks:
+      - default
+      - coolify
+    labels:
+      caddy_ingress_network: "coolify"
+      caddy_0: "${SERVICE_FQDN_FRONTEND}"
+      caddy_0.reverse_proxy: "{{upstreams 80}}"
     depends_on:
       - backend
+
+networks:
+  coolify:
+    external: true
 
 volumes:
   mongo_data:
