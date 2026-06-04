@@ -1,0 +1,27 @@
+env
+.venv
+.mypy_cache
+files
+.vscode
+.env
+
+# devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
+# system files
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+dist/
