@@ -19,9 +19,7 @@ services:
       ACADEMY_JWT_SECRET: ${ACADEMY_JWT_SECRET:-change_me_in_production}
       FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-http://localhost:3000,http://localhost:5173}
     expose:
-      - "8000"
-    labels:
-      - coolify.port=8000
+      - "80"
     depends_on:
       mongo:
         condition: service_healthy
