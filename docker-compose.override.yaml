@@ -1,0 +1,10 @@
+# Automatically used by `docker compose up` for local development.
+# Binds container ports to the host so localhost:8000 and localhost:3000 work.
+# This file is NOT used by Coolify.
+services:
+  backend:
+    ports:
+      - "8000:8000"
+  frontend:
+    ports:
+      - "3000:80"

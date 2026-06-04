@@ -18,8 +18,8 @@ services:
       MONGODB_URL: mongodb://mongo:27017
       ACADEMY_JWT_SECRET: ${ACADEMY_JWT_SECRET:-change_me_in_production}
       FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-http://localhost:3000,http://localhost:5173}
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     depends_on:
       mongo:
         condition: service_healthy
@@ -29,8 +29,8 @@ services:
       context: ./frontend
       args:
         VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
-    ports:
-      - "3000:80"
+    expose:
+      - "80"
     depends_on:
       - backend
 
