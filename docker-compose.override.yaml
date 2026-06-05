@@ -8,3 +8,7 @@ services:
   frontend:
     ports:
       - "3000:80"
+
+networks:
+  coolify:
+    external: false

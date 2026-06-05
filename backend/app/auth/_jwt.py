@@ -20,10 +20,11 @@ _ALGORITHM = "HS256"
 _TOKEN_TTL_HOURS = 24
 
 
-def encode(employee_id: str, company_id: str) -> str:
+def encode(employee_id: str, company_id: str, email: str) -> str:
     payload = {
         "sub": employee_id,
         "company_id": company_id,
+        "email": email,
         "exp": datetime.now(tz=timezone.utc) + timedelta(hours=_TOKEN_TTL_HOURS),
     }
     return jwt.encode(payload, _settings.academy_jwt_secret, algorithm=_ALGORITHM)
@@ -35,7 +36,9 @@ def decode(token: str) -> EmployeeToken:
             token, _settings.academy_jwt_secret, algorithms=[_ALGORITHM]
         )
         return EmployeeToken(
-            employee_id=payload["sub"], company_id=payload["company_id"]
+            employee_id=payload["sub"],
+            company_id=payload["company_id"],
+            email=payload["email"],
         )
     except jwt.PyJWTError as exc:
         raise AuthorizationError("Invalid or expired token") from exc

@@ -14,3 +14,4 @@ class TokenResponse(pyd.BaseModel):
 class EmployeeToken(pyd.BaseModel):
     employee_id: str
     company_id: str
+    email: str

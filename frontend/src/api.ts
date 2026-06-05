@@ -38,10 +38,30 @@ export interface CourseListItem {
   status: string;
   quiz_status: string;
   quiz_attempts_count: number;
+  max_attempts: number | null;
+  content_completed: boolean;
+  completed_date: string | null;
+  last_quiz_score: number | null;
 }
 
 export async function listCourses(): Promise<CourseListItem[]> {
   const res = await fetch(`${BASE}/me/courses`, {
+    headers: authHeaders(),
+  });
+  return handle(res);
+}
+
+export async function completeVideo(assignmentId: string): Promise<CourseListItem> {
+  const res = await fetch(`${BASE}/me/courses/${assignmentId}/complete-video`, {
+    method: "POST",
+    headers: authHeaders(),
+  });
+  return handle(res);
+}
+
+export async function retakeCourse(assignmentId: string): Promise<CourseListItem> {
+  const res = await fetch(`${BASE}/me/courses/${assignmentId}/retake`, {
+    method: "POST",
     headers: authHeaders(),
   });
   return handle(res);
@@ -94,4 +114,15 @@ export async function submitQuiz(
     }
   );
   return handle(res);
+}
+
+export function getEmailFromToken(): string {
+  const t = token();
+  if (!t) return "";
+  try {
+    const payload = JSON.parse(atob(t.split(".")[1]));
+    return payload.email ?? "";
+  } catch {
+    return "";
+  }
 }

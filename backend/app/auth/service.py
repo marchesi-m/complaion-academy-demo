@@ -20,5 +20,6 @@ class AuthService:
             access_token=_jwt.encode(
                 employee_id=employee.id,
                 company_id=employee.company_id,
+                email=employee.email,
             )
         )

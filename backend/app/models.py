@@ -32,6 +32,7 @@ class AssignedInteractiveCourse(pyd.BaseModel):
     quiz_attempts_count: int = 0
     content_completed_date: str | None = None
     completed_date: str | None = None
+    last_quiz_score: float | None = None
 
 
 class AnswerOption(pyd.BaseModel):

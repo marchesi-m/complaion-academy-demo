@@ -20,14 +20,15 @@ export default function Result() {
 
   if ("alreadyPassed" in state) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: "#f5f4f0" }}>
         <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
           <div className="text-5xl mb-4">🎓</div>
           <h2 className="text-2xl font-semibold text-gray-900 mb-2">Already passed!</h2>
           <p className="text-gray-500 text-sm mb-6">You have already completed this quiz.</p>
           <button
             onClick={() => navigate("/courses")}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-lg text-sm transition-colors"
+            className="text-white font-medium px-6 py-2 rounded-lg text-sm transition-opacity hover:opacity-90"
+            style={{ backgroundColor: "#315DC4" }}
           >
             Back to courses
           </button>
@@ -41,7 +42,7 @@ export default function Result() {
   const canRetry = !passed && attempts_remaining !== 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: "#f5f4f0" }}>
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
         <div className="text-5xl mb-4">{passed ? "🎉" : "😞"}</div>
 
@@ -73,14 +74,16 @@ export default function Result() {
           {canRetry && (
             <button
               onClick={() => navigate(`/courses/${assignmentId}/quiz`)}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-lg text-sm transition-colors"
+              className="text-white font-medium px-6 py-2 rounded-lg text-sm transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#315DC4" }}
             >
               Try again
             </button>
           )}
           <button
             onClick={() => navigate("/courses")}
-            className="text-indigo-600 hover:underline text-sm"
+            className="text-sm hover:underline"
+            style={{ color: "#315DC4" }}
           >
             Back to courses
           </button>

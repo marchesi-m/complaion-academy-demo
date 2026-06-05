@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchQuiz, submitQuiz, type QuizFetchResponse, type QuizSubmitResponse } from "../api";
+import complaionLogo from "../assets/small-logo.jpg";
 
 export default function Quiz() {
   const { id: assignmentId } = useParams<{ id: string }>();
@@ -53,7 +54,7 @@ export default function Quiz() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#f5f4f0" }}>
         <p className="text-gray-400 text-sm">Loading quiz…</p>
       </div>
     );
@@ -61,12 +62,13 @@ export default function Quiz() {
 
   if (error && !quiz) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: "#f5f4f0" }}>
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
           <button
             onClick={() => navigate("/courses")}
-            className="text-indigo-600 hover:underline text-sm"
+            className="text-sm hover:underline"
+            style={{ color: "#315DC4" }}
           >
             Back to courses
           </button>
@@ -81,15 +83,17 @@ export default function Quiz() {
   const totalCount = quiz.questions.length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-gray-900">Complaion Academy</h1>
-        <button
-          onClick={() => navigate("/courses")}
-          className="text-sm text-gray-500 hover:text-gray-700"
-        >
-          ← My Courses
-        </button>
+    <div className="min-h-screen" style={{ backgroundColor: "#f5f4f0" }}>
+      <header className="bg-white border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-6 py-3 flex items-center justify-between">
+          <img src={complaionLogo} alt="Complaion" className="h-9 w-auto" />
+          <button
+            onClick={() => navigate("/courses")}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            ← My Courses
+          </button>
+        </div>
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-8">
@@ -117,7 +121,7 @@ export default function Quiz() {
                       key={opt.id}
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${
                         selected
-                          ? "border-indigo-500 bg-indigo-50"
+                          ? "border-blue-500 bg-blue-50"
                           : "border-gray-200 hover:border-gray-300"
                       }`}
                     >
@@ -151,7 +155,8 @@ export default function Quiz() {
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-medium px-6 py-2 rounded-lg text-sm transition-colors"
+            className="disabled:opacity-50 text-white font-medium px-6 py-2 rounded-lg text-sm transition-opacity hover:opacity-90"
+            style={{ backgroundColor: "#315DC4" }}
           >
             {submitting ? "Submitting…" : "Submit answers"}
           </button>

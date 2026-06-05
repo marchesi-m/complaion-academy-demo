@@ -109,7 +109,7 @@ class QuizService:
 
         new_count = assignment.quiz_attempts_count + 1
         if passed:
-            await self._complete_assignment(assignment, new_count)
+            await self._complete_assignment(assignment, new_count, score)
         else:
             exhausted = quiz.max_attempts != -1 and new_count >= quiz.max_attempts
             new_status = (
@@ -118,7 +118,7 @@ class QuizService:
             await _update_one(
                 "assigned_interactive_courses",
                 {"id": assigned_course_id},
-                {"$set": {"quiz_attempts_count": new_count, "quiz_status": new_status}},
+                {"$set": {"quiz_attempts_count": new_count, "quiz_status": new_status, "last_quiz_score": score}},
             )
 
         attempts_remaining = (
@@ -239,7 +239,7 @@ class QuizService:
         )
 
     async def _complete_assignment(
-        self, assignment: AssignedInteractiveCourse, new_count: int
+        self, assignment: AssignedInteractiveCourse, new_count: int, score: float
     ) -> None:
         now = _now_str()
         await _update_one(
@@ -251,6 +251,7 @@ class QuizService:
                     "completed_date": now,
                     "quiz_status": enums.QuizStatus.PASSED,
                     "quiz_attempts_count": new_count,
+                    "last_quiz_score": score,
                 }
             },
         )

@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../api";
+import complaionLogo from "../assets/small-logo.jpg";
+
+const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -14,7 +16,16 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const { access_token } = await login(email, password);
+      const res = await fetch(`${BASE}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.detail ?? "Invalid credentials");
+      }
+      const { access_token } = await res.json();
       localStorage.setItem("token", access_token);
       navigate("/courses");
     } catch (err: unknown) {
@@ -25,11 +36,17 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ backgroundColor: "#f5f4f0" }}>
+      <div className="flex flex-col items-center mb-6">
+        <img src={complaionLogo} alt="Complaion" className="h-16 w-auto mb-2" />
+        <span className="text-sm font-medium tracking-widest uppercase" style={{ color: "#3a3a3a" }}>
+          Academy
+        </span>
+      </div>
+
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold text-gray-900">Complaion Academy</h1>
-          <p className="text-sm text-gray-500 mt-1">Sign in to access your courses</p>
+        <div className="mb-6 text-center">
+          <h1 className="text-xl font-semibold text-gray-900">Sign in to your account</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -66,7 +83,10 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-medium py-2 rounded-lg text-sm transition-colors"
+            className="w-full disabled:opacity-50 text-white font-medium py-2 rounded-lg text-sm transition-colors"
+            style={{ backgroundColor: "#6d28d9" }}
+            onMouseEnter={(e) => { if (!loading) (e.target as HTMLElement).style.backgroundColor = "#5b21b6"; }}
+            onMouseLeave={(e) => { (e.target as HTMLElement).style.backgroundColor = "#6d28d9"; }}
           >
             {loading ? "Signing in…" : "Sign in"}
           </button>
