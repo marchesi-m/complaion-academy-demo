@@ -3,6 +3,13 @@
 
 db = db.getSiblingDB("complaion_demo");
 
+// Drop all collections so the script is safe to re-run on every deployment
+db.employees.drop();
+db.interactive_courses.drop();
+db.assigned_interactive_courses.drop();
+db.quizzes.drop();
+db.quiz_attempts.drop();
+
 // ── Employee ──────────────────────────────────────────────────────────────────
 db.employees.insertOne({
   id: "usr_demo001",
