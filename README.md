@@ -58,14 +58,14 @@ Backend (FastAPI + Motor async driver)
 
 ## Assignment State Machine
 
-```
-todo ──[watch video · no quiz]────────────────────────► done
-todo ──[watch video · quiz required]──► pending
-pending ──[quiz pass]─────────────────────────────────► done
-pending ──[quiz fail · attempts left]──► pending (quiz: NOT_STARTED)
-pending ──[quiz fail · no attempts left]──► pending (quiz: EXHAUSTED)
-exhausted ──[retake]──► todo  (all fields reset to initial state)
-```
+| From | Trigger | To |
+|---|---|---|
+| `todo` | Watch video — no quiz | `done` |
+| `todo` | Watch video — quiz required | `pending` |
+| `pending` | Pass quiz | `done` |
+| `pending` | Fail quiz — attempts remaining | `pending` *(quiz resets to* `not_started`*)* |
+| `pending` | Fail quiz — no attempts left | `pending` *(quiz becomes* `exhausted`*)* |
+| `exhausted` | Retake course | `todo` *(all fields reset)* |
 
 Quiz status is a sub-state field on the assignment document: `not_started → in_progress → passed | exhausted | not_started`.
 
