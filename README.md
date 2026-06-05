@@ -104,7 +104,7 @@ The demo is seeded with all five states pre-populated so every flow can be demon
 
 ---
 
-## Option A — Docker Compose (recommended)
+## Deployment Option A — Docker Compose (recommended)
 
 Runs everything (MongoDB + backend + frontend) in one command. MongoDB is seeded automatically on first start.
 
@@ -124,7 +124,7 @@ To reset the database: `docker compose down -v && docker compose up --build`
 
 ---
 
-## Option B — Run locally (without Docker)
+## Deployment Option B — Run locally (without Docker)
 
 Requires: Python 3.12+, Node.js 22+, a running MongoDB instance.
 
