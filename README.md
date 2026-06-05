@@ -3,6 +3,7 @@
 A compliance training platform where employees are assigned courses, watch a video, optionally sit a timed quiz, and receive a certificate on completion. Built as a backend engineering demo.
 
 Demo credentials: `demo@complaion.com` / `demo1234`
+Demo solutions: green dots provided on the correct question for testing outcomes easily
 
 ---
 
