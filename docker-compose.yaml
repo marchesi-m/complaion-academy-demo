@@ -13,10 +13,8 @@ services:
       retries: 10
 
   seeder:
-    image: mongo:7
-    volumes:
-      - ./mongo-init:/seed:ro
-    command: mongosh mongodb://mongo:27017/complaion_demo --file /seed/seed.js
+    build: ./mongo-init
+    command: mongosh mongodb://mongo:27017/complaion_demo --file /seed.js
     depends_on:
       mongo:
         condition: service_healthy
