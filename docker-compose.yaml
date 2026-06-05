@@ -1,7 +1,6 @@
 services:
   mongo:
     image: mongo:7
-    container_name: complaion-mongo
     volumes:
       - mongo_data:/data/db
       - ./mongo-init:/docker-entrypoint-initdb.d:ro
@@ -12,6 +11,16 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  seeder:
+    image: mongo:7
+    volumes:
+      - ./mongo-init:/seed:ro
+    command: mongosh mongodb://mongo:27017/complaion_demo /seed/seed.js
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: "no"
 
   backend:
     build: ./backend
@@ -29,6 +38,8 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+      seeder:
+        condition: service_completed_successfully
 
   frontend:
     build:
