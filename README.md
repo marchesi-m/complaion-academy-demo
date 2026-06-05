@@ -39,8 +39,7 @@ Backend (FastAPI + Motor async driver)
         seeded automatically on first start
 ```
 
-- **Auth**: HS256 JWT. The token carries `employee_id`, `company_id`, and `email` — the frontend can display the logged-in user without an extra round-trip.
-- **Routing**: The JWT token already contains everything the backend needs (`employee_id`, `company_id`, `email`), so no extra database call is made to identify the caller.
+- **Auth**: HS256 JWT. The token carries `employee_id`, `company_id`, and `email` — both the frontend (to display the logged-in user) and the backend (to scope queries) read identity directly from the token, with no extra database lookup.
 - **Seed**: `mongo-init/seed.js` drops and rebuilds all collections on every container start, guaranteeing a clean demo state after every deploy.
 
 ---
