@@ -16,10 +16,7 @@ Demo solutions: green dots provided on the correct question for testing outcomes
   </tr>
   <tr>
     <td><img src="docs/screenshots/quiz.jpg" width="380"/></td>
-  </tr>
-  <tr>
     <td><img src="docs/screenshots/certificate.jpg" width="380"/></td>
-    <td></td>
   </tr>
 </table>
 
