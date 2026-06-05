@@ -16,7 +16,7 @@ services:
     image: mongo:7
     volumes:
       - ./mongo-init:/seed:ro
-    command: mongosh mongodb://mongo:27017/complaion_demo /seed/seed.js
+    command: mongosh mongodb://mongo:27017/complaion_demo --file /seed/seed.js
     depends_on:
       mongo:
         condition: service_healthy

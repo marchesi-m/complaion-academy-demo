@@ -1,8 +1,6 @@
 // Runs automatically on first container start via /docker-entrypoint-initdb.d
 // Uses the complaion_demo database (set via MONGO_INITDB_DATABASE)
 
-db = db.getSiblingDB("complaion_demo");
-
 // Drop all collections so the script is safe to re-run on every deployment
 db.employees.drop();
 db.interactive_courses.drop();
@@ -122,4 +120,4 @@ db.quizzes.insertOne({
   ],
 });
 
-print("✅ Seed complete: employee, course, assignment, and quiz inserted.");
+print("Seed complete: employee, course, assignment, and quiz inserted.");
