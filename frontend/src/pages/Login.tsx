@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import complaionLogo from "../assets/small-logo.jpg";
+import complaionLogo from "../assets/complaion-logo.png";
 
 const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
@@ -36,22 +36,22 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ backgroundColor: "#f5f4f0" }}>
-      <div className="flex flex-col items-center mb-6">
-        <img src={complaionLogo} alt="Complaion" className="h-16 w-auto mb-2" />
-        <span className="text-sm font-medium tracking-widest uppercase" style={{ color: "#3a3a3a" }}>
-          Academy
-        </span>
-      </div>
-
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 pb-3" style={{ backgroundColor: "#f5f4f0" }}>
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-        <div className="mb-6 text-center">
-          <h1 className="text-xl font-semibold text-gray-900">Sign in to your account</h1>
+        <div className="flex flex-col items-center mb-6">
+          <img src={complaionLogo} alt="Complaion" className="w-auto mb-2 rounded-xl" style={{ height: "100px" }} />
+          <span className="text-xl font-semibold tracking-widest uppercase pt-2" style={{ color: "#6b6b6b" }}>
+            Academy
+          </span>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="mb-6 text-center pt-5">
+          <p className="text-bg font-medium whitespace-nowrap" style={{ color: "#9ca3af" }}>Sign in to your account</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4 pb-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 pt-2">Email</label>
             <input
               type="email"
               required
