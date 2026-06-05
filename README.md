@@ -2,8 +2,9 @@
 
 A compliance training platform where employees are assigned courses, watch a video, optionally sit a timed quiz, and receive a certificate on completion. Built as a backend engineering demo.
 
-Demo credentials: `demo@complaion.com` / `demo1234`
-Demo solutions: green dots provided on the correct question for testing outcomes easily
+**Demo credentials**: `demo@complaion.com` / `demo1234`
+
+**Quiz solutions**: green dots provided on the correct answer for quick testing  
 
 ---
 
@@ -39,7 +40,7 @@ Backend (FastAPI + Motor async driver)
 ```
 
 - **Auth**: HS256 JWT. The token carries `employee_id`, `company_id`, and `email` — the frontend can display the logged-in user without an extra round-trip.
-- **Routing**: all protected endpoints live under `/me/*` and are scoped to the token's `employee_id`. No separate user-lookup endpoint exists.
+- **Routing**: The JWT token already contains everything the backend needs (`employee_id`, `company_id`, `email`), so no extra database call is made to identify the caller.
 - **Seed**: `mongo-init/seed.js` drops and rebuilds all collections on every container start, guaranteeing a clean demo state after every deploy.
 
 ---
@@ -98,7 +99,6 @@ The demo is seeded with all five states pre-populated so every flow can be demon
 - **Single language** — all UI copy and course content is in English. Localisation is not implemented.
 - **JWT-only authentication** — access is secured with HS256 JWT issued by the backend. No SSO, OAuth2, or third-party identity provider is integrated.
 - **Quiz resumability exposes questions** — when an attempt is started (`IN_PROGRESS`), navigating away and returning re-serves the same question set without creating a new attempt. A stricter implementation would invalidate the open attempt on navigation or enforce a submission time window, preventing candidates from noting questions across sessions.
-- **N+1 in `/me/courses`** — each assignment fires a separate `find_one` to fetch its quiz's `max_attempts`. Fixable with a single `$lookup` aggregation pipeline.
 - **No automated tests** — the service layer (`quiz/service.py`, auth) is structured for unit testing (pure functions, injected dependencies) but tests are not included.
 
 
