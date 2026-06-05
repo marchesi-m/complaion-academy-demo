@@ -1,8 +1,108 @@
 # Complaion Academy Demo
 
-A full-stack quiz demo: FastAPI backend, React/Vite/Tailwind frontend, MongoDB — all wired together with Docker Compose.
+A compliance training platform where employees are assigned courses, watch a video, optionally sit a timed quiz, and receive a certificate on completion. Built as a backend engineering demo.
 
 Demo credentials: `demo@complaion.com` / `demo1234`
+
+---
+
+## Screenshots
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/login.jpg" width="380"/></td>
+    <td><img src="docs/screenshots/course-list.jpg" width="380"/></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/quiz.jpg" width="380"/></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/certificate.jpg" width="380"/></td>
+    <td></td>
+  </tr>
+</table>
+
+---
+
+## Architecture
+
+```
+Frontend (React 18 / Vite / TypeScript / Tailwind)
+        served by nginx  ·  port 3000
+                │
+                │ REST + JWT
+                ▼
+Backend (FastAPI + Motor async driver)
+        served by uvicorn  ·  port 8000
+                │
+                ▼
+        MongoDB  ·  port 27017
+        seeded automatically on first start
+```
+
+- **Auth**: HS256 JWT. The token carries `employee_id`, `company_id`, and `email` — the frontend can display the logged-in user without an extra round-trip.
+- **Routing**: all protected endpoints live under `/me/*` and are scoped to the token's `employee_id`. No separate user-lookup endpoint exists.
+- **Seed**: `mongo-init/seed.js` drops and rebuilds all collections on every container start, guaranteeing a clean demo state after every deploy.
+
+---
+
+## Data Model
+
+| Collection | Purpose |
+|---|---|
+| `employees` | Login credentials and company membership |
+| `interactive_courses` | Course catalogue — name, document IDs, `quiz_required` flag |
+| `assigned_interactive_courses` | Per-employee assignment; owns the full lifecycle state machine |
+| `quizzes` | Question pool per course — `questions_per_attempt`, `passing_score`, `max_attempts` |
+| `quiz_attempts` | One document per attempt; stores the randomly-drawn questions and submitted answers |
+
+---
+
+## Assignment State Machine
+
+```
+todo ──[watch video · no quiz]────────────────────────► done
+todo ──[watch video · quiz required]──► pending
+pending ──[quiz pass]─────────────────────────────────► done
+pending ──[quiz fail · attempts left]──► pending (quiz: NOT_STARTED)
+pending ──[quiz fail · no attempts left]──► pending (quiz: EXHAUSTED)
+exhausted ──[retake]──► todo  (all fields reset to initial state)
+```
+
+Quiz status is a sub-state field on the assignment document: `not_started → in_progress → passed | exhausted | not_started`.
+
+The demo is seeded with all five states pre-populated so every flow can be demonstrated without going through the full journey live:
+
+| Course | State |
+|---|---|
+| ISO 9001 – Quality Management Systems | Fresh (Watch Course) |
+| ISO 45001 – Occupational Health & Safety | Quiz exhausted (Retake Course) |
+| GDPR – General Data Protection Regulation | Fresh (Watch Course) |
+| ISO 14001 – Environmental Management | Completed — no quiz (View Certificate) |
+| ISO 27001 – Information Security Management | Fresh (Watch Course) |
+
+---
+
+## Key Design Decisions
+
+- **Email in JWT payload** — avoids a `/me` lookup endpoint just to render the user's email in the header.
+- **Questions drawn from a pool** — each attempt randomly selects `questions_per_attempt` from the full pool, so retaking the quiz produces a different question set.
+- **Certificate ID derived on the frontend** — a deterministic hash of the `assignment_id`. Stable and unique per assignment with no extra database write.
+- **Idempotent seed script** — `db.collection.drop()` before every insert means the script can be re-run safely on every deployment, keeping demo data predictable.
+
+---
+
+## Limitations and Assumptions
+
+- **Demo data only** — MongoDB is seeded at container start with synthetic data. Nothing persists across restarts and the dataset does not reflect a real production environment.
+- **Single video per course** — the model supports multiple documents per course, but the demo assumes one video. In production, each course would expose a document menu allowing employees to re-watch individual items before attempting the quiz.
+- **Certificate as ID, not PDF** — the certificate page displays a unique deterministic ID derived from the assignment. A production implementation would generate and serve a signed PDF.
+- **Single language** — all UI copy and course content is in English. Localisation is not implemented.
+- **JWT-only authentication** — access is secured with HS256 JWT issued by the backend. No SSO, OAuth2, or third-party identity provider is integrated.
+- **Quiz resumability exposes questions** — when an attempt is started (`IN_PROGRESS`), navigating away and returning re-serves the same question set without creating a new attempt. A stricter implementation would invalidate the open attempt on navigation or enforce a submission time window, preventing candidates from noting questions across sessions.
+- **N+1 in `/me/courses`** — each assignment fires a separate `find_one` to fetch its quiz's `max_attempts`. Fixable with a single `$lookup` aggregation pipeline.
+- **No automated tests** — the service layer (`quiz/service.py`, auth) is structured for unit testing (pure functions, injected dependencies) but tests are not included.
+
 
 ---
 
