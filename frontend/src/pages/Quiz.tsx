@@ -115,7 +115,7 @@ export default function Quiz() {
         <div className="space-y-6">
           {quiz.questions.map((q, idx) => (
             <div key={q.question_id} className="bg-white rounded-xl border border-gray-200 p-5">
-              <p className="font-medium text-gray-900 mb-6">
+              <p className="font-medium text-gray-900 mb-6 pb-4 border-b border-gray-100">
                 {idx + 1}. {q.text}
               </p>
               <div className="space-y-2">
