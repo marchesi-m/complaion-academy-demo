@@ -5,7 +5,15 @@ interface Props {
 }
 
 function deriveCertificateId(assignmentId: string): string {
-  return btoa(assignmentId).replace(/[^a-z0-9]/gi, "").slice(0, 10).toLowerCase();
+  let h1 = 5381, h2 = 52711;
+  for (let i = 0; i < assignmentId.length; i++) {
+    const c = assignmentId.charCodeAt(i);
+    h1 = (((h1 << 5) + h1) ^ c) & 0x7fffffff;
+    h2 = (((h2 << 5) + h2) ^ c) & 0x7fffffff;
+  }
+  const part1 = h1.toString(36).toUpperCase().padStart(5, "0");
+  const part2 = h2.toString(36).toUpperCase().padStart(5, "0");
+  return `${part1}${part2}`.slice(0, 10);
 }
 
 export default function CertificateModal({ assignmentId, courseName, onClose }: Props) {

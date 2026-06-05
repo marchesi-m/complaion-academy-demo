@@ -40,12 +40,12 @@ export default function Login() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
         <div className="flex flex-col items-center mb-6">
           <img src={complaionLogo} alt="Complaion" className="w-auto mb-2 rounded-xl" style={{ height: "100px" }} />
-          <span className="text-xl font-semibold tracking-widest uppercase pt-2" style={{ color: "#6b6b6b" }}>
-            Academy
+          <span className="text-2xl font-semibold tracking-wide uppercase pt-2" style={{ color: "#6b6b6b" }}>
+            A c a d e m y
           </span>
         </div>
 
-        <div className="mb-6 text-center pt-5">
+        <div className="mb-6 text-center pt-3">
           <p className="text-bg font-medium whitespace-nowrap" style={{ color: "#9ca3af" }}>Sign in to your account</p>
         </div>
 
