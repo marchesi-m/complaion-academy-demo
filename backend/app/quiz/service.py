@@ -58,6 +58,8 @@ class QuizService:
 
         quiz = await self._lookup_quiz(assignment.interactive_course_id, token.company_id)
 
+        course_name = course_doc.get("name", "")
+
         match assignment.quiz_status:
             case enums.QuizStatus.EXHAUSTED:
                 raise AuthorizationError("Maximum attempts reached")
@@ -66,13 +68,14 @@ class QuizService:
                     already_passed=True,
                     attempt_number=0,
                     attempts_remaining=0,
+                    course_name=course_name,
                     questions=[],
                 )
             case enums.QuizStatus.IN_PROGRESS:
                 attempt = await self._get_open_attempt(assigned_course_id)
-                return self._build_fetch_response(attempt, quiz)
+                return self._build_fetch_response(attempt, quiz, course_name)
             case enums.QuizStatus.NOT_STARTED:
-                return await self._start_new_attempt(assignment, quiz, token)
+                return await self._start_new_attempt(assignment, quiz, token, course_name)
 
     async def submit_answers(
         self,
@@ -181,6 +184,7 @@ class QuizService:
         assignment: AssignedInteractiveCourse,
         quiz: Quiz,
         token: EmployeeToken,
+        course_name: str = "",
     ) -> QuizFetchResponse:
         selected = random.sample(
             quiz.questions,
@@ -213,28 +217,32 @@ class QuizService:
             {"id": assignment.id},
             {"$set": {"quiz_status": enums.QuizStatus.IN_PROGRESS}},
         )
-        return self._build_fetch_response(attempt, quiz)
+        return self._build_fetch_response(attempt, quiz, course_name)
 
     def _build_fetch_response(
-        self, attempt: QuizAttempt, quiz: Quiz
+        self, attempt: QuizAttempt, quiz: Quiz, course_name: str = ""
     ) -> QuizFetchResponse:
         attempts_remaining = (
             -1
             if quiz.max_attempts == -1
-            else max(0, quiz.max_attempts - (attempt.attempt_number - 1))
+            else max(0, quiz.max_attempts - attempt.attempt_number)
         )
         questions = [
             ServedQuestionResponse(
                 question_id=q.question_id,
                 type=q.type,
                 text=q.text,
-                options=[AnswerOptionResponse(id=o.id, text=o.text) for o in q.options],
+                options=[
+                    AnswerOptionResponse(id=o.id, text=o.text, is_correct=o.id in q.correct_option_ids)
+                    for o in q.options
+                ],
             )
             for q in attempt.served_questions
         ]
         return QuizFetchResponse(
             attempt_number=attempt.attempt_number,
             attempts_remaining=attempts_remaining,
+            course_name=course_name,
             questions=questions,
         )
 

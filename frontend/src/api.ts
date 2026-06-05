@@ -70,6 +70,7 @@ export async function retakeCourse(assignmentId: string): Promise<CourseListItem
 export interface AnswerOption {
   id: string;
   text: string;
+  is_correct: boolean;
 }
 
 export interface ServedQuestion {
@@ -82,6 +83,7 @@ export interface ServedQuestion {
 export interface QuizFetchResponse {
   attempt_number: number;
   attempts_remaining: number;
+  course_name: string;
   questions: ServedQuestion[];
   already_passed: boolean;
 }

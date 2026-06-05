@@ -85,20 +85,25 @@ export default function Quiz() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#f5f4f0" }}>
       <header className="bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-6 py-3 flex items-center justify-between">
-          <img src={complaionLogo} alt="Complaion" className="h-9 w-auto" />
+        <div className="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img src={complaionLogo} alt="Complaion" className="h-12 w-auto rounded-lg" />
+            <span className="text-base text-gray-600 font-semibold">Personal Area</span>
+          </div>
           <button
             onClick={() => navigate("/courses")}
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className="text-sm text-gray-500 hover:text-gray-800 transition-colors underline underline-offset-2"
           >
-            ← My Courses
+            ← Back to courses
           </button>
         </div>
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-8">
         <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Quiz</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 py-5">
+            {quiz.course_name} Quiz
+          </h2>
           <p className="text-sm text-gray-500 mt-1">
             Attempt {quiz.attempt_number} ·{" "}
             {quiz.attempts_remaining === -1
@@ -110,7 +115,7 @@ export default function Quiz() {
         <div className="space-y-6">
           {quiz.questions.map((q, idx) => (
             <div key={q.question_id} className="bg-white rounded-xl border border-gray-200 p-5">
-              <p className="font-medium text-gray-900 mb-4">
+              <p className="font-medium text-gray-900 mb-6">
                 {idx + 1}. {q.text}
               </p>
               <div className="space-y-2">
@@ -133,7 +138,10 @@ export default function Quiz() {
                         onChange={() => handleSelect(q.question_id, opt.id)}
                         className="accent-indigo-600"
                       />
-                      <span className="text-sm text-gray-800">{opt.text}</span>
+                      <span className="text-sm text-gray-800 flex-1">{opt.text}</span>
+                      {opt.is_correct && (
+                        <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" title="Correct answer" />
+                      )}
                     </label>
                   );
                 })}

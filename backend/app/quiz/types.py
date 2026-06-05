@@ -6,6 +6,7 @@ from app.enums import QuizStatus
 class AnswerOptionResponse(pyd.BaseModel):
     id: str
     text: str
+    is_correct: bool = False
 
 
 class ServedQuestionResponse(pyd.BaseModel):
@@ -13,12 +14,12 @@ class ServedQuestionResponse(pyd.BaseModel):
     type: str
     text: str
     options: list[AnswerOptionResponse]
-    # correct_option_ids intentionally omitted — never sent to the client
 
 
 class QuizFetchResponse(pyd.BaseModel):
     attempt_number: int
     attempts_remaining: int
+    course_name: str = ""
     questions: list[ServedQuestionResponse]
     already_passed: bool = False
 

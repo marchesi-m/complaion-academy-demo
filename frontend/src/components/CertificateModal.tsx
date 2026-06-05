@@ -25,10 +25,10 @@ export default function CertificateModal({ assignmentId, courseName, onClose }: 
           ✕
         </button>
 
-        <h2 className="text-2xl font-semibold text-gray-900 mb-3">Congratulations!</h2>
-        <div className="text-4xl mb-4">🎉</div>
-        <p className="text-sm text-gray-500 mb-1">{courseName}</p>
-        <p className="text-sm text-gray-500 mb-6">Your certificate ID is:</p>
+        <h2 className="text-3xl font-semibold text-gray-900 mb-3">Congratulations!</h2>
+        <div className="text-4xl mb-4 pb-3">🎉</div>
+        <p className="text-md text-gray-500 mb-1 font-semibold">{courseName}</p>
+        <p className="text-md text-gray-500 mb-6 pb-4 pt-6">Your certificate ID is:</p>
         <p
           className="text-xl font-mono font-semibold tracking-wider px-4 py-3 rounded-lg"
           style={{ backgroundColor: "#f5f4f0", color: "#1a1a1a" }}
